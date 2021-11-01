@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "828522939492",
+    "project_id": "pacients-67ea3",
+    "storage_bucket": "pacients-67ea3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828522939492:android:4074ffd48a505542354b71",
+        "android_client_info": {
+          "package_name": "com.example.visitas_medicas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "828522939492-tjqvdkmg3imj1c8fba18idg08uikbu62.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATpYSzH3Tfmuwtq61NKo0EwPJa7E_q95g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "828522939492-tjqvdkmg3imj1c8fba18idg08uikbu62.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
