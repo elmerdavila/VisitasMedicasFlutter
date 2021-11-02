@@ -102,18 +102,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notes"),
+        title: Text("Lista de Visitas Medicas"),
         centerTitle: true,
       ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: (){
+            print('FloatingActionButton');
+          },
+        ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('pacientes').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           return ListView.builder(
           itemCount: streamSnapshot.data!.docs.length,
           itemBuilder: (ctx, index) =>
-          Text(streamSnapshot.data!.docs[index]['full_name']),
-          );
-        },
+          ListTile(
+            title:Text(streamSnapshot.data!.docs[index]['full_name']),
+            subtitle:Text(streamSnapshot.data!.docs[index]['address']),
+          )
+              );
+        }
     )
     );
     }
