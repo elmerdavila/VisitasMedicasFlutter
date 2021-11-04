@@ -3,6 +3,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,12 +70,31 @@ class Paciente{
 }
 class _MyHomePageState extends State<MyHomePage> {
 
+  String fullname="";
+  double height=0;
+  String address="";
+  double latitude =0;
+  double longitude =0;
+  GlobalKey formkey= GlobalKey<FormState>();
+
+  TextEditingController TECfullname= new TextEditingController();
+  TextEditingController TECheight= new TextEditingController();
+  TextEditingController TECaddress= new TextEditingController();
+  TextEditingController TEClatitude= new TextEditingController();
+  TextEditingController TEClongitude= new TextEditingController();
   @override
   void initState(){
     super.initState();
-
     getPacientes();
+  }
 
+  void getCurrentLocation ()async {
+    var position = await Geolocator()!.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print("$position.latitude , $position.longitude");
+    setState(() {
+      latitude = position.latitude;
+      longitude = position.longitude;
+    });
   }
   Future getPacientes() async {
     var firestore= FirebaseFirestore.instance;
@@ -94,7 +115,74 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<void> showDialogForm(BuildContext context) async{
+    return await showDialog(
+        context: context,
+        builder: (context){
+          final TextEditingController _nameController = TextEditingController();
+          return AlertDialog(
+            content: Form(
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      controller: TECfullname,
+                      decoration: InputDecoration(labelText: "nombre completo"),
+                      onSaved:(value){
+                        fullname = value!.isNotEmpty?value:"";
+                      },
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return "ingrese el nombre";
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      controller: TECheight,
+                      decoration: InputDecoration(labelText: "estatura"),
+                      onSaved:(value){
+                        height = double.parse(value!);
+                      },
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return "ingrese la estatura";
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      controller: TECaddress,
+                      decoration: InputDecoration(labelText: "Dirección"),
+                      onSaved:(value){
+                        address = value!.isNotEmpty?value:"";
+                      },
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return "ingrese la dirección";
+                        }
+                      },
+                    ),
+                    Text("latitude: $latitude"),
+                    Text("longitude: $longitude")
+                  ],
+                )
+            ),
+            actions: <Widget>[
+              TextButton(
+                  child: Text("Agregar Visitante"),
+                  onPressed:(){
+                    Map <String, dynamic> data = {
+                      "full_name": TECfullname.text,
+                      "address": TECaddress.text,
+                      "height_cm": TECheight.text
 
+                    };
+                    FirebaseFirestore.instance.collection("pacientes").add(data);
+                    Navigator.of(context).pop();
+                  },
+              ),
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +195,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
-          onPressed: (){
-            print('FloatingActionButton');
+          onPressed: () async{
+            getCurrentLocation();
+            await showDialogForm(context);
           },
         ),
       body: StreamBuilder<QuerySnapshot>(
