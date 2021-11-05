@@ -75,6 +75,12 @@ class _MyHomePageState extends State<MyHomePage> {
   String address="";
   double latitude =0;
   double longitude =0;
+
+  double peso=0;
+  double temperature=0;
+  double presion=0;
+  double saturacion=0;
+
   GlobalKey formkey= GlobalKey<FormState>();
 
   TextEditingController TECfullname= new TextEditingController();
@@ -82,6 +88,11 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController TECaddress= new TextEditingController();
   TextEditingController TEClatitude= new TextEditingController();
   TextEditingController TEClongitude= new TextEditingController();
+
+  TextEditingController TECpeso= new TextEditingController();
+  TextEditingController TECtemperatura= new TextEditingController();
+  TextEditingController TECpresion= new TextEditingController();
+  TextEditingController TECsaturacion= new TextEditingController();
   @override
   void initState(){
     super.initState();
@@ -160,6 +171,54 @@ class _MyHomePageState extends State<MyHomePage> {
                         }
                       },
                     ),
+                    TextFormField(
+                      controller: TECpeso,
+                      decoration: InputDecoration(labelText: "peso"),
+                      onSaved:(value){
+                        peso= double.parse(value!);
+                      },
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return "ingrese peso";
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      controller: TECtemperatura,
+                      decoration: InputDecoration(labelText: "Temperatura"),
+                      onSaved:(value){
+                        temperature= double.parse(value!);
+                      },
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return "ingrese la temperatura";
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      controller: TECpresion,
+                      decoration: InputDecoration(labelText: "Presion"),
+                      onSaved:(value){
+                        presion = double.parse(value!);
+                      },
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return "ingrese la presion";
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      controller: TECsaturacion,
+                      decoration: InputDecoration(labelText: "Saturacion"),
+                      onSaved:(value){
+                        saturacion = double.parse(value!);
+                      },
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return "ingrese la saturacion";
+                        }
+                      },
+                    ),
                     Text("latitude: $latitude"),
                     Text("longitude: $longitude")
                   ],
@@ -172,7 +231,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     Map <String, dynamic> data = {
                       "full_name": TECfullname.text,
                       "address": TECaddress.text,
-                      "height_cm": TECheight.text
+                      "height_cm": TECheight.text,
+                      "pressure":TECpresion,
+                      "saturation":TECsaturacion,
+                      "temperature":TECtemperatura,
+                      "weight_kg":TECpeso
 
                     };
                     FirebaseFirestore.instance.collection("pacientes").add(data);
